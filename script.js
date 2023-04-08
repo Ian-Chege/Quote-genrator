@@ -7,8 +7,21 @@ const loader = document.getElementById('loader');
 
 let apiQuotes = [];
 
+//Loading spinner shown
+const loading = () => {
+    loader.hidden = false;
+    quoteContainer.hidden = true;
+}
+
+//Remove loading spinner
+const complete = () => {
+    quoteContainer.hidden = false;
+    loader.hidden = true;
+}
+
 //show newQuote
 const newQuote = () => {
+    loading();
     //pick a random quote from apiQuotes array
     const quote = apiQuotes[Math.floor(Math.random()*apiQuotes.length)];
     //Check if Author field is blank and replace it with 'Unknown'
@@ -23,12 +36,14 @@ const newQuote = () => {
     } else {
         quoteText.classList.remove('long-quote');
     }
-    
+    // Set quote, hide loader
     quoteText.textContent = quote.text;
+    complete();
 }
 
 //Get Quotes from API
 const getQuotes = async () => {
+    loading();
     const apiUrl = "https://jacintodesign.github.io/quotes-api/data/quotes.json";
     try{
         //read the JSON
@@ -43,7 +58,7 @@ const getQuotes = async () => {
 };
 
 //Tweet Quote
-tweetQuote = () => {
+const tweetQuote = () => {
     const twitterUrl = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`;
     window.open(twitterUrl,'_blank');
 } 
